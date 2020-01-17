@@ -11,35 +11,43 @@ describe("docDB", function() {
 
     describe("in general", function() {
         let docDB,
-            dbName = "TEST";
+            dbName = "TEST1";
 
         before(function() {
             docDB = require("../../src/docDB");
         });
 
         it("should throw an error if one attempts to connect to a database that does not exist", function() {
+            expect(docDB.exists(dbName)).to.be.false;
             expect(docDB.connect).to.be.a("function");
             expect(() => {
                 docDB.connect(dbName);
             }).to.throw("db does not exist");
         });
 
-        it("should be able to create a new database");
+        it("should be able to create a new database", function() {
+            let db = docDB.createDB(dbName);
+            expect(db).to.not.be.undefined;
+            expect(db).to.not.be.null;
+        });
 
-        it(
-            "should throw an error if one attempts to create a database that already exists"
-        );
+        it("should throw an error if one attempts to create a database that already exists", function() {
+            expect(() => docDB.createDB(dbName)).to.throw("db already exists");
+        });
 
-        it(
-            "should be able to connect to a database that's already been created"
-        );
+        it("should be able to connect to a database that's already been created", function() {
+            expect(() => docDB.connect(dbName)).to.not.throw();
+        });
 
-        it("should delete a database");
+        it("should be able to check if a database exists", function() {
+            expect(docDB.exists(dbName)).to.be.true;
+        });
 
-        // it("should create new database", function() {
-        //     let db = docDB.createDB(dbName);
-        //     expect(db).to.not.be.undefined;
-        //     expect(db).to.not.be.null;
-        // });
+        it("should delete a database", function() {
+            docDB.deleteDB(dbName);
+            expect(docDB.exists(dbName)).to.be.false;
+            expect(() => docDB.connect(dbName)).to.throw("db does not exist");
+            expect(() => docDB.deleteDB(dbName)).to.throw("db does not exist");
+        });
     });
 });
