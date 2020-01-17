@@ -1,0 +1,17 @@
+{
+    "name": "level_document_db",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "naga",
+    "license": "MIT",
+    "dependencies": {
+        "level": "^6.0.0"
+    },
+    "devDependencies": {
+        "mocha": "^7.0.0"
+    },
+    "scripts": {
+        "start": "node ./src/main.js",
+        "test": "mocha 'test/**/*.js' --recursive --exit"
+    }
+}
