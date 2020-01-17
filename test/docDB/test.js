@@ -1,5 +1,7 @@
 const assert = require("assert");
 const expect = require("chai").expect;
+const fse = require("fs-extra");
+const path = require("path");
 
 describe("docDB", function() {
     it("should load module without throwing an error", () => {
@@ -15,6 +17,12 @@ describe("docDB", function() {
 
         before(function() {
             docDB = require("../../src/docDB");
+        });
+
+        after(function() {
+            fse.remove(
+                path.resolve(__dirname, `../../src/docDB/_db/${dbName}`)
+            );
         });
 
         it("should throw an error if one attempts to connect to a database that does not exist", function() {
