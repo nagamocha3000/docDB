@@ -1,3 +1,3 @@
-const conn = require("./conn");
+const db = require("./db");
 
-module.exports = { ...conn };
+module.exports = { ...db };
