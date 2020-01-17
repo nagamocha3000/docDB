@@ -1,6 +1,7 @@
 const level = require("level");
 const path = require("path");
 const dbPath = path.resolve(__dirname, "./_db");
+const fs = require("fs");
 
 const getDBs = () => {
     let contents = fs.readdirSync(dbPath, { withFileTypes: true });
@@ -14,4 +15,6 @@ const connect = dbName => {
     throw new Error("db does not exist");
 };
 
-module.exports = { connect };
+const exists = dbName => getDBs().includes(dbName);
+
+module.exports = { connect, exists };
