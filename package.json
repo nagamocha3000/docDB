@@ -5,9 +5,11 @@
     "author": "naga",
     "license": "MIT",
     "dependencies": {
+        "cuid": "^2.1.8",
         "flat": "^5.0.0",
         "fs-extra": "^8.1.0",
-        "level": "^6.0.0"
+        "level": "^6.0.0",
+        "shortid": "^2.2.15"
     },
     "devDependencies": {
         "chai": "^4.2.0",

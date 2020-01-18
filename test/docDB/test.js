@@ -1,7 +1,7 @@
-const assert = require("assert");
 const expect = require("chai").expect;
 const fse = require("fs-extra");
 const path = require("path");
+const shortid = require("shortid");
 
 describe("docDB", function() {
     it("should load module without throwing an error", () => {
@@ -13,14 +13,17 @@ describe("docDB", function() {
 
     describe("in general", function() {
         let docDB,
-            dbName = "TEST1";
+            dbName = `TEST_${shortid.generate()}`;
 
         before(function() {
             docDB = require("../../src/docDB");
+            fse.removeSync(
+                path.resolve(__dirname, `../../src/docDB/_db/${dbName}`)
+            );
         });
 
         after(function() {
-            fse.remove(
+            fse.removeSync(
                 path.resolve(__dirname, `../../src/docDB/_db/${dbName}`)
             );
         });
@@ -37,14 +40,19 @@ describe("docDB", function() {
             let db = docDB.createDB(dbName);
             expect(db).to.not.be.undefined;
             expect(db).to.not.be.null;
+            db.close();
         });
 
         it("should throw an error if one attempts to create a database that already exists", function() {
+            expect(docDB.exists(dbName)).to.be.true;
             expect(() => docDB.createDB(dbName)).to.throw("db already exists");
         });
 
         it("should be able to connect to a database that's already been created", function() {
-            expect(() => docDB.connect(dbName)).to.not.throw();
+            expect(() => {
+                let db = docDB.connect(dbName);
+                db.close();
+            }).to.not.throw();
         });
 
         it("should be able to check if a database exists", function() {
@@ -52,6 +60,7 @@ describe("docDB", function() {
         });
 
         it("should delete a database", function() {
+            expect(docDB.deleteDB).to.be.a("function");
             docDB.deleteDB(dbName);
             expect(docDB.exists(dbName)).to.be.false;
             expect(() => docDB.connect(dbName)).to.throw("db does not exist");
